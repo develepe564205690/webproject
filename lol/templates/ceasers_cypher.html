@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Caesar Cipher</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Caesar Cipher</h1>
+        <div class="input-section">
+            <div class="form-group">
+                <label for="text">Text:</label>
+                <textarea id="text" rows="4" placeholder="Enter text to encrypt/decrypt"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="shift">Shift Amount:</label>
+                <input type="number" id="shift" value="3" min="1" max="25">
+            </div>
+            <div class="button-group">
+                <button onclick="encrypt()">Encrypt</button>
+                <button onclick="decrypt()">Decrypt</button>
+            </div>
+        </div>
+        <div class="result-section">
+            <h2>Result:</h2>
+            <div id="result" class="result-box"></div>
+        </div>
+    </div>
+
+    <script>
+        async function encrypt() {
+            const text = document.getElementById('text').value;
+            const shift = document.getElementById('shift').value;
+            const response = await fetch('/encrypt', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ text, shift }),
+            });
+            const data = await response.json();
+            document.getElementById('result').textContent = data.result;
+        }
+
+        async function decrypt() {
+            const text = document.getElementById('text').value;
+            const shift = document.getElementById('shift').value;
+            const response = await fetch('/decrypt', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ text, shift }),
+            });
+            const data = await response.json();
+            document.getElementById('result').textContent = data.result;
+        }
+    </script>
+</body>
+</html> 
